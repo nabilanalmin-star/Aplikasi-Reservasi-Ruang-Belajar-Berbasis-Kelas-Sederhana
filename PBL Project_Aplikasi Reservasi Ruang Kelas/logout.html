@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - Peminjaman Ruang Kelas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --pink-bg: #fff7fb;
+            --pink-sidebar: #fbddeb;
+            --pink-light: #fce8f2;
+            --pink-primary: #e85d9e;
+            --pink-dark: #cb4788;
+            --pink-border: #f5dce9;
+            --text-dark: #76596e;
+            --text-muted: #a18b9c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: var(--text-dark);
+        }
+        
+/* Memaksa halaman memenuhi layar */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    min-height: 100vh !important;
+}
+
+/* Menghilangkan batas lebar Bootstrap */
+.container,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+    max-width: 100% !important;
+}
+
+/* Container utama */
+.container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Wrapper dashboard */
+.wrapper,
+.dashboard,
+.main-wrapper,
+.app-container,
+.layout-wrapper {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+}
+
+        .app-container {
+           width: 100%;
+           max-width: none;
+           min-height: 100vh;
+           margin: 0;
+    display: flex;
+    overflow: hidden;
+    background: var(--pink-bg);
+    box-shadow: none;
+}
+        .sidebar {
+            width: 218px;
+            flex-shrink: 0;
+            min-height: 780px;
+            padding: 20px 13px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: linear-gradient(
+                180deg,
+                #f9dce9 0%,
+                #fbddeb 60%,
+                #f8cfe2 100%
+            );
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px 22px;
+            text-decoration: none;
+            color: var(--pink-dark);
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: white;
+            background: var(--pink-primary);
+            font-size: 20px;
+            box-shadow: 0 5px 12px #e85d9e33;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-menu a {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 0 15px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: #8b6480;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .sidebar-menu a i {
+            width: 18px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-menu a:hover {
+            background: #f8cfe2;
+            color: var(--pink-dark);
+        }
+
+        .sidebar-menu a.active {
+            background: #f7c5dd;
+            color: var(--pink-dark);
+            font-weight: bold;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logout-menu {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 0 15px;
+            border-radius: 9px;
+            background: #f7c5dd;
+            color: var(--pink-dark);
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logout-menu i {
+            font-size: 17px;
+        }
+
+        .logout-menu:hover {
+            background: #f4b4d2;
+            color: #b93377;
+        }
+
+        .plant-decoration {
+            position: absolute;
+            left: -10px;
+            bottom: 65px;
+            color: #efb5d1;
+            opacity: 0.65;
+            font-size: 75px;
+            transform: rotate(-18deg);
+            pointer-events: none;
+        }
+        .main-area {
+            flex: 1;
+            min-width: 0;
+            background: #fff8fc;
+        }
+
+        .topbar {
+            min-height: 66px;
+            padding: 0 27px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: #fff7fb;
+            border-bottom: 1px solid #f5e4ed;
+        }
+
+        .search-top {
+            width: min(405px, 60%);
+            height: 38px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            background: #fbe6f0;
+            color: #d77aa7;
+        }
+
+        .search-top input {
+            width: 100%;
+            min-width: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 12px;
+            color: var(--text-dark);
+        }
+
+        .search-top input::placeholder {
+            color: #b99aaa;
+        }
+
+        .topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .notification-button {
+            position: relative;
+            border: none;
+            background: transparent;
+            color: var(--pink-dark);
+            font-size: 18px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 1px;
+            right: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ec4c91;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #856c80;
+            font-size: 12px;
+        }
+
+        .admin-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--pink-primary);
+            background: #f8d7e7;
+            font-size: 18px;
+        }
+
+        .content {
+            padding: 20px 27px 28px;
+        }
+
+        .page-banner {
+            min-height: 126px;
+            margin-bottom: 18px;
+            padding: 24px 27px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 13px;
+            background: linear-gradient(
+                105deg,
+                #fbe0ed 0%,
+                #fbd8e9 58%,
+                #f8c9df 100%
+            );
+        }
+
+        .page-banner::after {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 190px;
+            right: 15px;
+            top: -40px;
+            border-radius: 50%;
+            background: #f7bdd8;
+            opacity: 0.38;
+        }
+
+        .banner-icon {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #f6c6de;
+            color: var(--pink-primary);
+            font-size: 27px;
+            z-index: 1;
+        }
+
+        .banner-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-text h1 {
+            margin: 0 0 8px;
+            color: #d94c8c;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .banner-text p {
+            margin: 0;
+            color: #987e91;
+            font-size: 13px;
+        }
+
+        .banner-art {
+            margin-left: auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+            color: #df82ad;
+            font-size: 65px;
+            opacity: 0.8;
+        }
+        .logout-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.95fr);
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        .panel {
+            border: 1px solid var(--pink-border);
+            border-radius: 12px;
+            background: #fffafd;
+            box-shadow: 0 2px 7px #d77aa70a;
+        }
+
+        .panel-heading {
+            min-height: 48px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            border-bottom: 1px solid #f7e7ef;
+            color: #c94b86;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .panel-heading i {
+            font-size: 18px;
+        }
+        .logout-body {
+            padding: 30px 24px;
+            text-align: center;
+        }
+
+        .logout-illustration {
+            width: 94px;
+            height: 94px;
+            margin: 0 auto 20px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #fde8f2;
+            color: var(--pink-primary);
+            font-size: 42px;
+            box-shadow: 0 0 0 10px #fff4f9;
+        }
+
+        .logout-body h2 {
+            margin: 0 0 10px;
+            color: #c94b86;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logout-body > p {
+            max-width: 480px;
+            margin: 0 auto 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .user-summary {
+            max-width: 440px;
+            margin: 0 auto 24px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            border: 1px solid #f5dce8;
+            border-radius: 10px;
+            background: #fff5fa;
+        }
+
+        .summary-avatar {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #d95091;
+            background: #f8d6e7;
+            font-size: 19px;
+        }
+
+        .summary-name {
+            margin-bottom: 4px;
+            color: #6f5266;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .summary-role {
+            color: #a18b9c;
+            font-size: 12px;
+        }
+
+        .btn-cancel,
+        .btn-logout {
+            min-height: 45px;
+            padding: 11px 20px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-cancel {
+            margin-right: 8px;
+            border: 1px solid #efcddd;
+            color: #ba5484;
+            background: white;
+        }
+
+        .btn-cancel:hover {
+            background: #fff0f7;
+        }
+
+        .btn-logout {
+            min-width: 175px;
+            border: none;
+            color: white;
+            background: linear-gradient(90deg, #e85d9e, #e34f91);
+            box-shadow: 0 5px 12px #e85d9e33;
+        }
+
+        .btn-logout:hover {
+            color: white;
+            background: #d74689;
+            transform: translateY(-1px);
+        }
+
+        .help-list {
+            padding: 12px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .help-item {
+            padding: 13px 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            border: 1px solid #f5e7ee;
+            border-radius: 10px;
+            background: #fffafd;
+        }
+
+        .help-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #d95796;
+            background: #fce5f0;
+            font-size: 15px;
+        }
+
+        .help-item strong {
+            display: block;
+            margin: 2px 0 5px;
+            color: #775a70;
+            font-size: 12px;
+        }
+
+        .help-item span {
+            display: block;
+            color: #a18c9d;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .security-note {
+            margin: 4px 15px 15px;
+            padding: 12px;
+            border-radius: 9px;
+            color: #a17994;
+            background: #fff0f7;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .footer-note {
+            padding: 17px 4px 0;
+            color: #b29bad;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .logged-out-screen {
+            display: none;
+            min-height: 500px;
+            padding: 65px 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 86px;
+            height: 86px;
+            margin: 0 auto 20px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: white;
+            background: var(--pink-primary);
+            font-size: 38px;
+            box-shadow: 0 0 0 10px #fff0f7;
+        }
+
+        .logged-out-screen h2 {
+            margin-bottom: 12px;
+            color: #c94b86;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logged-out-screen p {
+            color: #9b8c9a;
+            line-height: 1.8;
+        }
+
+        .btn-login {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 25px;
+            border-radius: 9px;
+            color: white;
+            background: var(--pink-primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-login:hover {
+            color: white;
+            background: #d74689;
+        }
+
+
+        @media (max-width: 900px) {
+            .app-container {
+                width: calc(100% - 24px);
+            }
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .logout-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .banner-art {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .app-container {
+                width: 100%;
+                margin: 0;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 12px;
+            }
+
+            .brand {
+                padding: 0 8px 12px;
+            }
+
+            .sidebar-menu {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .sidebar-menu a {
+                min-height: 38px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 8px;
+            }
+
+            .plant-decoration {
+                display: none;
+            }
+
+            .topbar {
+                min-height: 58px;
+                padding: 0 14px;
+            }
+
+            .topbar-right {
+                gap: 12px;
+            }
+
+            .content {
+                padding: 14px;
+            }
+
+            .page-banner {
+                min-height: 115px;
+                padding: 18px;
+                gap: 12px;
+            }
+
+            .banner-icon {
+                width: 43px;
+                height: 43px;
+                font-size: 21px;
+            }
+
+            .banner-art {
+                display: none;
+            }
+
+            .banner-text h1 {
+                font-size: 21px;
+            }
+
+            .banner-text p {
+                font-size: 12px;
+            }
+
+            .logout-body {
+                padding: 24px 15px;
+            }
+
+            .btn-cancel,
+            .btn-logout {
+                width: 100%;
+                margin: 0 0 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+
+        <a href="#" class="brand">
+            <span class="brand-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </span>
+
+            <span>
+                Peminjaman<br>
+                Ruang Kelas
+            </span>
+        </a>
+
+        <nav class="sidebar-menu">
+            <a href="dashboard.html" data-page="Dashboard">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+            <a href="layout.html" data-page="Reservasi">
+                <i class="fa-regular fa-calendar-check"></i>
+                Reservasi
+            </a>
+
+            <a href="jadwal_ruang_kelas.html" data-page="Jadwal">
+                <i class="fa-regular fa-calendar-days"></i>
+                Jadwal
+            </a>
+
+            <a href="master.html" data-page="Data Master">
+                <i class="fa-regular fa-rectangle-list"></i>
+                Data Master
+                <i class="fa-solid fa-chevron-down ms-auto"></i>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="logout.html" class="logout-menu" id="sidebarLogout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+
+        <div class="plant-decoration">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+
+    </aside>
+    <div class="main-area">
+        <header class="topbar">
+
+            <label class="search-top">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="search"
+                    placeholder="Cari ruang kelas..."
+                    aria-label="Cari ruang kelas"
+                >
+            </label>
+
+            <div class="topbar-right">
+
+                <button
+                    class="notification-button"
+                    id="notificationButton"
+                    type="button"
+                    aria-label="Notifikasi"
+                >
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="admin-profile">
+                    <span class="admin-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+
+                    <span>Admin</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+
+            </div>
+        </header>
+        <main class="content" id="logoutContent">
+            <section class="page-banner">
+
+                <div class="banner-icon">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </div>
+
+                <div class="banner-text">
+                    <h1>Logout Akun</h1>
+                    <p>
+                        Keluar dari sistem peminjaman ruang kelas dengan aman.
+                    </p>
+                </div>
+
+                <div class="banner-art" aria-hidden="true">
+                    <i class="fa-solid fa-door-open"></i>
+                </div>
+
+            </section>
+
+            <div class="logout-layout">
+
+                <section class="panel">
+
+                    <div class="panel-heading">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Konfirmasi Logout
+                    </div>
+
+                    <div class="logout-body">
+
+                        <div class="logout-illustration">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+
+                        <h2>Yakin ingin keluar?</h2>
+
+                        <p>
+                            Anda akan keluar dari sesi akun saat ini.
+                            Pastikan semua aktivitas Anda sudah selesai
+                            sebelum melanjutkan.
+                        </p>
+
+                        <div class="user-summary">
+
+                            <div class="summary-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+
+                            <div>
+                                <div class="summary-name">Admin</div>
+                                <div class="summary-role">
+                                    Administrator · Peminjaman Ruang Kelas
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn-cancel"
+                            id="cancelLogout"
+                        >
+                            <i class="fa-solid fa-arrow-left me-2"></i>
+                            Batal
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn-logout"
+                            id="confirmLogout"
+                        >
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Ya, Logout
+                        </button>
+
+                    </div>
+                </section>
+
+                <aside class="panel">
+
+                    <div class="panel-heading">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Informasi Logout
+                    </div>
+
+                    <div class="help-list">
+
+                        <div class="help-item">
+                            <div class="help-icon">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+
+                            <div>
+                                <strong>Keamanan Akun</strong>
+                                <span>
+                                    Selalu keluar setelah selesai menggunakan
+                                    sistem, terutama pada komputer bersama.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="help-item">
+                            <div class="help-icon">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+
+                            <div>
+                                <strong>Data Reservasi</strong>
+                                <span>
+                                    Data reservasi yang sudah disimpan tidak
+                                    dihapus saat Anda logout.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="help-item">
+                            <div class="help-icon">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            </div>
+
+                            <div>
+                                <strong>Masuk Kembali</strong>
+                                <span>
+                                    Anda dapat masuk kembali melalui halaman
+                                    login aplikasi.
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="security-note">
+                        <i class="fa-solid fa-heart me-1"></i>
+                        Terima kasih telah menggunakan Peminjaman Ruang Kelas.
+                    </div>
+
+                </aside>
+
+            </div>
+
+            <div class="footer-note">
+                © 2026 Peminjaman Ruang Kelas · Sistem Informasi Akademik
+            </div>
+
+        </main>
+
+        <section class="logged-out-screen" id="loggedOutScreen">
+
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <h2>Anda Berhasil Logout!</h2>
+
+            <p>
+                Sesi demo Anda telah berakhir.<br>
+                Terima kasih telah menggunakan Peminjaman Ruang Kelas.
+            </p>
+
+            <a href="#" class="btn-login" id="loginAgain">
+                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>
+                Masuk Kembali
+            </a>
+
+        </section>
+
+    </div>
+</div>
+
+<script>
+    
+const logoutContent = document.getElementById("logoutContent");
+const loggedOutScreen = document.getElementById("loggedOutScreen");
+
+const confirmLogout = document.getElementById("confirmLogout");
+const cancelLogout = document.getElementById("cancelLogout");
+const sidebarLogout = document.getElementById("sidebarLogout");
+const loginAgain = document.getElementById("loginAgain");
+const notificationButton = document.getElementById("notificationButton");
+
+// Konfirmasi logout
+function doLogout() {
+    const yakin = confirm("Apakah Anda yakin ingin logout?");
+
+    if (yakin) {
+        logoutContent.style.display = "none";
+        loggedOutScreen.style.display = "block";
+    }
+}
+
+// Tombol Ya, Logout
+confirmLogout.addEventListener("click", function() {
+    doLogout();
+});
+
+// Menu Logout di sidebar
+sidebarLogout.addEventListener("click", function(event) {
+    event.preventDefault();
+    doLogout();
+});
+
+// Tombol Batal
+cancelLogout.addEventListener("click", function() {
+    alert("Logout dibatalkan. Anda masih berada di halaman ini.");
+});
+
+// Tombol Masuk Kembali
+loginAgain.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    loggedOutScreen.style.display = "none";
+    logoutContent.style.display = "block";
+});
+
+// Tombol notifikasi
+notificationButton.addEventListener("click", function() {
+    alert("Tidak ada notifikasi baru.");
+});
+
+// Navigasi sidebar ke halaman lain
+document.querySelectorAll(".sidebar-menu a[data-page]").forEach(link => {
+    const href = link.getAttribute("href");
+
+    if (!href || href === "#") return;
+
+    const currentPage = window.location.pathname.split("/").pop();
+    link.classList.toggle("active", currentPage === href);
+});
+
+</script>
+
+</body>
+</html>
